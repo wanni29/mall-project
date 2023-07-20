@@ -29,26 +29,21 @@
     </div>
 </nav>
 <div class="container mt-3">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>상품번호</th>
-            <th>상품명</th>
-            <th>상품가격</th>
-            <th>상품재고</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="p" items="${productList}">
-            <tr>
-               <td>${p.id}</td> <%-- 알아서 get 때려줌--%>
-                <td><a href = "/product/${p.id}">${p.name}</a></td>
-                <td>${p.price}원</td>
-                <td>${p.qty}개</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    <form action="/product/{id}" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="mb-3 mt-3">
+            <input type="text" class="form-control" placeholder="${p.id}" value="${p.id}" name="${p.id}">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="${p.name}" value="${p.name}" name="${p.name}" >
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="${p.price}" value="${p.price}" name="${p.price}">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="${p.qty}" value="${p.qty}" name="${p.qty}">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 </body>
 </html>

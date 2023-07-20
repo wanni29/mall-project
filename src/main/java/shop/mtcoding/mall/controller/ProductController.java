@@ -3,6 +3,7 @@ package shop.mtcoding.mall.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import shop.mtcoding.mall.model.Product;
 import shop.mtcoding.mall.model.ProductRepository;
@@ -17,6 +18,20 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @GetMapping("/product/{id}")
+    public String detail(@PathVariable int id, HttpServletRequest request) {
+        System.out.println("id : " + id);
+        Product product = productRepository.findById(id);
+        request.setAttribute("p", product);
+        System.out.println(product.getId());
+        System.out.println(product.getName());
+        System.out.println(product.getPrice());
+        System.out.println(product.getQty());
+        return "detail";
+    }
+
+
 
     @GetMapping("/")
     public String home(HttpServletRequest request) {
@@ -40,7 +55,6 @@ public class ProductController {
 
         productRepository.save(name, price, qty);
         response.sendRedirect("/");
-
     }
 
 }

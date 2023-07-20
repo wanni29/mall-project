@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Table(name = "product_tb")
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Integer id;

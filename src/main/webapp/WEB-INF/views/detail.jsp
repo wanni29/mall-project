@@ -45,7 +45,7 @@
         <button type="submit" class="btn btn-primary">상품수정</button>
     </form>
     <form action="/product/delete" method="post">
-        <input type="text" class="form-control" value="${p.id}"  name="id">
+        <input type="hidden" class="form-control" value="${p.id}"  name="id">
         <button type="submit" class="btn btn-danger">상품삭제</button>
     </form>
 </div>

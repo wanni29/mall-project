@@ -23,7 +23,7 @@ public class ProductController {
     public String detail(@PathVariable int id, HttpServletRequest request) {
         System.out.println("id : " + id);
         Product product = productRepository.findById(id);
-        request.setAttribute("p", product);
+        request.setAttribute("p", product); // 뷰에서 꺼내 쓸수있다. // EL 표현식
         System.out.println(product.getId());
         System.out.println(product.getName());
         System.out.println(product.getPrice());

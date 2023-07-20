@@ -29,20 +29,24 @@
     </div>
 </nav>
 <div class="container mt-3">
-    <form action="/product/{id}" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="/product/update" method="post" enctype="application/x-www-form-urlencoded">
         <div class="mb-3 mt-3">
-            <input type="text" class="form-control" placeholder="${p.id}" value="${p.id}" name="${p.id}">
+            <input type="text" class="form-control"  value="${p.id}" name="id">
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="${p.name}" value="${p.name}" name="${p.name}" >
+            <input type="text" class="form-control"  value="${p.name}" name="name" >
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="${p.price}" value="${p.price}" name="${p.price}">
+            <input type="text" class="form-control"  value="${p.price}" name="price">
         </div>
         <div class="mb-3">
-            <input type="text" class="form-control" placeholder="${p.qty}" value="${p.qty}" name="${p.qty}">
+            <input type="text" class="form-control"  value="${p.qty}" name="qty">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">상품수정</button>
+    </form>
+    <form action="/product/delete" method="post">
+        <input type="text" class="form-control" value="${p.id}"  name="id">
+        <button type="submit" class="btn btn-danger">상품삭제</button>
     </form>
 </div>
 </body>

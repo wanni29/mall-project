@@ -19,6 +19,20 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+
+    // 리퀘스트 가방을 새로 만들 필요가 있을까? -> 코드가 중복되기때문에?? 만들면 안된다.
+    @PostMapping("/product/delete")
+    public String delete(int id) {
+        productRepository.deleteById(id);
+         return "redirect:/";
+    }
+
+    @PostMapping("/product/update")
+    public String update(String name, int id, int price, int qty) {
+        productRepository.update(name, id, price, qty);
+        return "redirect:/";
+    }
+
     @GetMapping("/product/{id}")
     public String detail(@PathVariable int id, HttpServletRequest request) {
         System.out.println("id : " + id);
@@ -53,8 +67,11 @@ public class ProductController {
         System.out.println("price: " + price);
         System.out.println("qty: " + qty);
 
+
+        // 컨트롤러의 메서드를 재호출하는 방법
         productRepository.save(name, price, qty);
         response.sendRedirect("/");
+        // return "redirect:/";
     }
 
 }

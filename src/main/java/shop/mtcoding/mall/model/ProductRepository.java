@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 
 // 요즘 트랜드는 DAO 를 repository로 부른다.
@@ -18,6 +19,17 @@ public class ProductRepository {
     @Autowired // DBconnection -> 스프링에 만들어진거를 땡겨온다
     private EntityManager em; // 얘가 디비랑 연결되는 역할
     // 오브젝트 맵핑을 엔티티 골뱅이 붙은에만 한다 그래서 테스트 케이스에서 DTO에서 에러 뜨는거임
+
+    public Product findByIdJoinSeller(int id) {
+        Query query = em.createNativeQuery("select *  \n" +
+                "from product_tb p_tb \n" +
+                "inner join seller_tb s_tb\n" +
+                "on p_tb.seller_id = s_tb.id\n" +
+                "where p_tb.id = :id", Product.class);
+        query.setParameter("id", id);
+        Product product = (Product) query.getSingleResult();
+        return product;
+    }
 
     public ProductDTO findByIdDTO(int id) {
         //  em.createNativeQuery() 이게 무슨 역할하는지도 정확히 알아두면 좋을거 같아
@@ -37,6 +49,16 @@ public class ProductRepository {
         ProductDTO productDTO = mapper.uniqueResult(query, ProductDTO.class);
 
         return productDTO;
+    }
+
+    @Transactional
+    public void saveWithFK(String name, int price, int qty, int sellerId) {
+        Query query = em.createNativeQuery("insert into product_tb(name, price, qty, seller_id) values(:name, :price, :qty, :sellerId)");
+        query.setParameter("name", name);
+        query.setParameter("price", price);
+        query.setParameter("qty", qty);
+        query.setParameter("sellerId", sellerId);
+        query.executeUpdate();
     }
 
     @Transactional // 자원누유를 막는 어노테이션 close역할

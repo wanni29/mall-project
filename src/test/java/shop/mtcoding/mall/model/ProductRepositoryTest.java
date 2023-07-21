@@ -13,12 +13,18 @@ import java.util.List;
 // 확인 하고자 하는것  Repository -> DB
 // 성에 쌀창고만 짓고 테스트하는거야, 필요한것만 메모리에 띄워서 테스트
 
-@Import(ProductRepository.class) // TEST에다가 ProductRepository 이거를 끌고 오겠다는 말이네
+@Import({
+        ProductRepository.class,
+        SellerRepository.class
+}) // TEST에다가 ProductRepository 이거를 끌고 오겠다는 말이네
 @DataJpaTest
 public class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private SellerRepository sellerRepository;
 
     @Test
     public void findByIdDTO_test() {
@@ -40,11 +46,33 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void findById_test(){
-        
+    public void findByIdJoinSeller_test() {
+        // given
+        sellerRepository.save("홍길동", "ssar@name.com");
+        productRepository.saveWithFK("바나나", 5000, 50, 1);
+
+
+        // when
+        Product product = productRepository.findByIdJoinSeller(1);
+
+        // then
+        System.out.println(product.getId());
+        System.out.println(product.getName());
+        System.out.println(product.getPrice());
+        System.out.println(product.getQty());
+        System.out.println("-----------" + product.getSeller().getId());
+        System.out.println("-----------" + product.getSeller().getName());
+        System.out.println("-----------" + product.getSeller().getEmail());
+
+
+    }
+
+    @Test
+    public void findById_test() {
+
         // given (테스트를 하기 위해서 필요한 데이터 만들기)
         productRepository.save("바나나", 5000, 50);
-        
+
         // when (테스트 진행)
         Product product = productRepository.findById(1);
 
@@ -57,7 +85,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void findByIdJoinSeller_test(){
+    public void findByIdJoinSeller2_test() {
 
         // given (테스트를 하기 위해서 필요한 데이터 만들기)
         productRepository.save("바나나", 5000, 50);
@@ -81,7 +109,7 @@ public class ProductRepositoryTest {
         productRepository.save("딸기", 5000, 50);
 
         // when
-        List<Product> entityList =productRepository.findAll();
+        List<Product> entityList = productRepository.findAll();
 
         // then
         entityList.forEach(entity -> {

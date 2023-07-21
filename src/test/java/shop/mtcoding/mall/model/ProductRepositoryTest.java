@@ -52,6 +52,8 @@ public class ProductRepositoryTest {
         productRepository.saveWithFK("바나나", 5000, 50, 1);
 
 
+
+
         // when
         Product product = productRepository.findByIdJoinSeller(1);
 

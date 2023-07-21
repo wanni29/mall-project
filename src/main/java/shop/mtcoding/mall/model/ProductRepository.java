@@ -1,6 +1,7 @@
 package shop.mtcoding.mall.model;
 
 
+import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ public class ProductRepository {
 
     @Autowired // DBconnection -> 스프링에 만들어진거를 땡겨온다
     private EntityManager em; // 얘가 디비랑 연결되는 역할
+    // 오브젝트 맵핑을 엔티티 골뱅이 붙은에만 한다 그래서 테스트 케이스에서 DTO에서 에러 뜨는거임
 
     public ProductDTO findByIdDTO(int id) {
         //  em.createNativeQuery() 이게 무슨 역할하는지도 정확히 알아두면 좋을거 같아
@@ -28,9 +30,12 @@ public class ProductRepository {
         // 네이버블로그 -> 회원가입 - > 로그인 - > 블로그 생성 - > 글쓰기
         // findByIdDTO 이거 하나를 실행하기위해서 이전껄 다만들것인가 ? -> 그래서 test 가 있다.
         // 패키지 명에서 mall 이하만 컴포넌트 스캔을 한다.
-        Query query = em.createNativeQuery("select id, name, price, qty, '설명' des from product_tb where id = :id", ProductDTO.class);
+        Query query = em.createNativeQuery("select id, name, price, qty, '설명' des from product_tb where id = :id");
         query.setParameter("id", id);
-        ProductDTO productDTO = (ProductDTO) query.getSingleResult();
+
+        JpaResultMapper mapper = new JpaResultMapper();
+        ProductDTO productDTO = mapper.uniqueResult(query, ProductDTO.class);
+
         return productDTO;
     }
 

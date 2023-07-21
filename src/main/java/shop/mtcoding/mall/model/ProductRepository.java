@@ -17,6 +17,23 @@ public class ProductRepository {
     @Autowired // DBconnection -> 스프링에 만들어진거를 땡겨온다
     private EntityManager em; // 얘가 디비랑 연결되는 역할
 
+    public ProductDTO findByIdDTO(int id) {
+        //  em.createNativeQuery() 이게 무슨 역할하는지도 정확히 알아두면 좋을거 같아
+        // 조회 할때는 맵핑할 클래스를 적어줘야해
+        // as des 별칭 지을때 -> as 생략가능
+        // des를 담을 변수가 없기때문에 productDTO 를 만든거임
+        // 외우지마라, 적응만 해라, 나중엔 이렇게 하지 않는다.
+        // @Transactional - > 업데이트, 인서트, 딜리트만 붙이는거야
+        // 무언가를 테스트 하기위해선 더미데이터가 필요하고 이전과정이 다 필요하다.
+        // 네이버블로그 -> 회원가입 - > 로그인 - > 블로그 생성 - > 글쓰기
+        // findByIdDTO 이거 하나를 실행하기위해서 이전껄 다만들것인가 ? -> 그래서 test 가 있다.
+        // 패키지 명에서 mall 이하만 컴포넌트 스캔을 한다.
+        Query query = em.createNativeQuery("select id, name, price, qty, '설명' des from product_tb where id = :id", ProductDTO.class);
+        query.setParameter("id", id);
+        ProductDTO productDTO = (ProductDTO) query.getSingleResult();
+        return productDTO;
+    }
+
     @Transactional // 자원누유를 막는 어노테이션 close역할
     public void save(String name, int price, int qty) {
         Query query = em.createNativeQuery("insert into product_tb(name, price, qty) values(:name, :price, :qty)");
